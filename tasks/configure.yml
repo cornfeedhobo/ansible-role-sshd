@@ -1,0 +1,32 @@
+---
+-
+  name: "configure | Ensure /etc/ssh/sshd_config.d exists"
+  become: true
+  ansible.builtin.file:
+    state: "directory"
+    path: "/etc/ssh/sshd_config.d"
+    owner: "{{ sshd_owner }}"
+    group: "{{ sshd_group }}"
+    mode: "0700"
+-
+  name: "configure | Ensure sshd is configured to include /etc/ssh/sshd_config.d/*.conf"
+  become: true
+  ansible.builtin.lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: "^Include /etc/ssh/sshd_config\\.d/*\\.conf$"
+    line: "Include /etc/ssh/sshd_config.d/*.conf"
+    validate: "{{ sshd_bin_path }} -t -f %s"
+  notify:
+    - "Restart sshd"
+-
+  name: "configure | Configure sshd with ansible managed config"
+  become: true
+  ansible.builtin.template:
+    src: "config.j2"
+    dest: "/etc/ssh/sshd_config.d/{{ sshd_config_file_name }}.conf"
+    owner: "{{ sshd_owner }}"
+    group: "{{ sshd_group }}"
+    mode: "0600"
+    validate: "{{ sshd_bin_path }} -t -f %s"
+  notify:
+    - "Restart sshd"

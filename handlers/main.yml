@@ -1,0 +1,11 @@
+---
+-
+  name: "Restart sshd"
+  when:
+    - "sshd_service"
+    - "sshd_service_state == 'started'"
+  become: true
+  ansible.builtin.service:
+    name: "{{ sshd_service_name }}"
+    state: "restarted"
+  tags: ["always"]

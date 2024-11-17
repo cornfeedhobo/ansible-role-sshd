@@ -1,0 +1,20 @@
+---
+- # This include ensures this role is only used against supported hosts
+  name: "Include OS-specific variables"
+  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
+  tags: ["sshd", "sshd-install", "sshd-configure", "sshd-service"]
+-
+  name: "Include install.yml"
+  when: "sshd_install"
+  ansible.builtin.import_tasks: "install.yml"
+  tags: ["sshd", "sshd-install"]
+-
+  name: "Include configure.yml"
+  when: "sshd_configure"
+  ansible.builtin.import_tasks: "configure.yml"
+  tags: ["sshd", "sshd-configure"]
+-
+  name: "Include service.yml"
+  when: "sshd_service"
+  ansible.builtin.import_tasks: "service.yml"
+  tags: ["sshd", "sshd-service"]

@@ -1,0 +1,19 @@
+---
+
+sshd_install: false
+sshd_package_state: "present"
+sshd_packages: "{{ __sshd_packages }}"
+
+sshd_bin_path: "{{ __sshd_bin_path }}"
+
+sshd_owner: "root"
+sshd_group: "root"
+
+sshd_service: false
+sshd_service_name: "{{ __sshd_service_name }}"
+sshd_service_state: "started"
+sshd_service_enabled: true
+
+sshd_configure: false
+sshd_config_file_name: "ansible-managed"
+sshd_config_contents: ""

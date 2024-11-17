@@ -1,0 +1,36 @@
+---
+-
+  name: "install | Manage sshd package(s)"
+  become: true
+  ansible.builtin.package:
+    name: "{{ sshd_packages }}"
+    state: "{{ sshd_package_state }}"
+-
+  name: "install | Check if /etc/ssh/ssh_host_rsa_key exists"
+  become: true
+  ansible.builtin.stat:
+    path: "/etc/ssh/ssh_host_rsa_key"
+  register: "_sshd_rsa_key"
+-
+  name: "install | Check if /etc/ssh/ssh_host_ecdsa_key exists"
+  become: true
+  ansible.builtin.stat:
+    path: "/etc/ssh/ssh_host_ecdsa_key"
+  register: "_sshd_ecdsa_key"
+-
+  name: "install | Check if /etc/ssh/ssh_host_ed25519_key exists"
+  become: true
+  ansible.builtin.stat:
+    path: "/etc/ssh/ssh_host_ed25519_key"
+  register: "_sshd_ed25519_key"
+-
+  name: "install | Generate SSH host keys if any are missing"
+  when:
+    - "_sshd_rsa_key.stat.exists is not defined or not _sshd_rsa_key.stat.exists"
+    - "_sshd_ecdsa_key.stat.exists is not defined or not _sshd_ecdsa_key.stat.exists"
+    - "_sshd_ed25519_key.stat.exists is not defined or not _sshd_ed25519_key.stat.exists"
+  ansible.builtin.command: "ssh-keygen -A"
+  register: "_sshd_keygen"
+  changed_when: "_sshd_keygen.stdout.startswith('ssh-keygen: generating new host keys:')"
+  notify:
+    - "Restart sshd"

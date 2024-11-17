@@ -1,0 +1,7 @@
+---
+
+__sshd_packages: ["openssh-server"]
+
+__sshd_bin_path: "/usr/sbin/sshd"
+
+__sshd_service_name: "ssh"

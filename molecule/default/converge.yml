@@ -1,0 +1,12 @@
+---
+-
+  name: "Converge"
+  hosts: "all"
+  tasks:
+    -
+      name: "Include cornfeedhobo.sshd"
+      ansible.builtin.include_role:
+        name: "cornfeedhobo.sshd"
+      vars:
+        sshd_install: true
+        sshd_configure: true
