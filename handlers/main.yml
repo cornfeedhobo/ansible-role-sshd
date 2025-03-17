@@ -1,6 +1,6 @@
 ---
--
-  name: "Restart sshd"
+
+- name: "Restart sshd"
   when:
     - "sshd_service"
     - "sshd_service_state == 'started'"
@@ -8,4 +8,4 @@
   ansible.builtin.service:
     name: "{{ sshd_service_name }}"
     state: "restarted"
-  tags: ["always"]
+  tags: ["sshd", "sshd-install", "sshd-configure", "sshd-service"]

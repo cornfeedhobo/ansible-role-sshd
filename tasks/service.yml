@@ -1,6 +1,6 @@
 ---
--
-  name: "service | Manage the sshd service"
+
+- name: "service | Manage the sshd service"
   become: true
   ansible.builtin.service:
     name: "{{ sshd_service_name }}"

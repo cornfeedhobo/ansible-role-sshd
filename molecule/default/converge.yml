@@ -1,10 +1,9 @@
 ---
--
-  name: "Converge"
+
+- name: "Converge"
   hosts: "all"
   tasks:
-    -
-      name: "Include cornfeedhobo.sshd"
+    - name: "Include cornfeedhobo.sshd"
       ansible.builtin.include_role:
         name: "cornfeedhobo.sshd"
       vars:

@@ -1,34 +1,33 @@
 ---
--
-  name: "Verify"
+
+- name: "Verify"
   hosts: "all"
   gather_facts: true
   tasks:
-    -
-      name: "Include role variables"
+    - name: "Include role variables"
       ansible.builtin.include_vars: "{{ item }}"
       with_items:
         - "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/vars/{{ ansible_os_family }}.yml"
         - "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/defaults/main.yml"
-    -
-      name: "Get the sshd package status"
+
+    - name: "Get the sshd package status"
       ansible.builtin.package:
         name: "{{ sshd_packages }}"
       check_mode: true
       diff: true
       register: "_sshd_packages"
-    -
-      name: "Assert that sshd is already installed"
+
+    - name: "Assert that sshd is already installed"
       ansible.builtin.assert:
         that:
           - "not _sshd_packages.changed"
-    -
-      name: "Get the sshd ansible config status"
+
+    - name: "Get the sshd ansible config status"
       ansible.builtin.stat:
         path: "/etc/ssh/sshd_config.d/{{ sshd_config_file_name }}.conf"
       register: "_sshd_config"
-    -
-      name: "Assert that sshd is configured"
+
+    - name: "Assert that sshd is configured"
       ansible.builtin.assert:
         that:
           - "_sshd_config.stat.exists is defined and _sshd_config.stat.exists"
